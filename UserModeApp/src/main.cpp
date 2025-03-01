@@ -11,8 +11,6 @@
 #include "Hacks/Hacks.h"
 #include "Extra/colors.h"
 
-
-
 int main() {
 	HWND console = GetConsoleWindow();
 

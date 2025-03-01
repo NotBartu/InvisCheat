@@ -20,7 +20,6 @@ void read_memory_array(HANDLE driver_handle, uintptr_t address, T* buffer) {
 		if (buffer[i] == '\0') break;
 	}
 }
-
 namespace Hacks {
 	struct Setting {
 		bool ShowEntityInfo;
@@ -51,17 +50,21 @@ namespace Hacks {
 			switch (choice) {
 			case '1':
 				std::cout << "Set ShowEntityInfo (0 or 1): "; choice1 = _getch(); std::cout << choice << std::endl;
-				if (choice1 == '0')
-					Settings.ShowEntityInfo = false;
-				else
+				if (choice1 == '1') {
 					Settings.ShowEntityInfo = true;
+				}
+				else {
+					Settings.ShowEntityInfo = false;
+				}
 				break;
 			case '2':
 				std::cout << "Set ShowBombInfo (0 or 1): "; choice1 = _getch(); std::cout << choice << std::endl;
-				if (choice1 == '0')
-					Settings.ShowBombInfo = false;
-				else
+				if (choice1 == '1') {
 					Settings.ShowBombInfo = true;
+				}
+				else {
+					Settings.ShowBombInfo = false;
+				}
 				break;
 			case '0':
 				std::cout << "Exiting." << std::endl;
