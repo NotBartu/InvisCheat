@@ -4,6 +4,22 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 
+VOID start_process(const char* command)
+{
+	STARTUPINFOA si = { sizeof(STARTUPINFOA) };
+	PROCESS_INFORMATION pi;
+
+	if (CreateProcessA(nullptr, (LPSTR)command, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
+		WaitForSingleObject(pi.hProcess, INFINITE);
+
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	}
+	else {
+		std::cerr << "Got error when starting the app. Error code: " << GetLastError() << std::endl;
+	}
+}
+
 static DWORD get_process_id(const wchar_t* process_name) {
 	DWORD process_id = 0;
 

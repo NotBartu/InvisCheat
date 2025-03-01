@@ -35,7 +35,8 @@ int main() {
 
 		std::cout << "Press those keys to:" << std::endl;
 		std::cout << "1. Start hack" << std::endl;
-		std::cout << "2. Open settings menu" << std::endl;
+		std::cout << "2. Start Kernel Driver" << std::endl;
+		std::cout << "3. Open settings menu" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << std::endl;
 		
@@ -50,6 +51,13 @@ int main() {
 			Hacks::StartLoop(Settings);
 			break;
 		case '2':
+			std::cout << "Starting Kernel Driver." << std::endl << std::endl;
+			Hacks::StartKernelDriver();
+			std::cout << "\033[2J\033[1;1H";
+			std::cout << "Started Kernel Driver sucessfully!." << std::endl;
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+			break;
+		case '3':
 			Settings = Hacks::StartSettings(Settings);
 			break;
 		case '0':

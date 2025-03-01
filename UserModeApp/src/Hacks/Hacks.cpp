@@ -25,6 +25,9 @@ namespace Hacks {
 		bool ShowEntityInfo;
 		bool ShowBombInfo;
 	};
+	void StartKernelDriver() {
+		start_process("C:\\InvisCheat\\kdmapper.exe C:\\InvisCheat\\KernelDriver.sys");
+	}
 	Setting StartSettings(Setting Settings) {
 		bool exit = false;
 

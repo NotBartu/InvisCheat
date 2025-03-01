@@ -5,6 +5,7 @@ namespace Hacks {
 		bool ShowEntityInfo;
 		bool ShowBombInfo;
 	};
+	void StartKernelDriver();
 	Setting StartSettings(Setting Settings);
 	int StartLoop(Setting Settings);
 };
