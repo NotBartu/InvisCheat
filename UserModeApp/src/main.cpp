@@ -23,15 +23,17 @@ int main() {
 	SetConsoleCP(CP_UTF8);
 	SetConsoleOutputCP(CP_UTF8);
 
-	bool exit = false;
+	int exit = 0;
 
 	Hacks::Setting Settings;
 	Settings.ShowEntityInfo = true;
 	Settings.ShowBombInfo = true;
 	while (true) {
 		std::cout << "\033[2J\033[1;1H";
-		if (exit)
+		if (exit == 1)
 			return 0;
+		else if (exit == 2)
+			std::cout << "Exited with error." << std::endl;
 
 		std::cout << "Press those keys to:" << std::endl;
 		std::cout << "1. Start hack" << std::endl;
@@ -39,39 +41,39 @@ int main() {
 		std::cout << "3. Open settings menu" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << std::endl;
-		
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		std::cout << "Choice: "; const char choice = _getch(); std::cout << choice << std::endl;
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		
-		switch (choice) {
+		switch (choice)
+		{
 		case '1':
-			Hacks::StartLoop(Settings);
+			if (Hacks::StartLoop(Settings) == 0) 
+				exit = 2;
 			break;
 		case '2':
-			std::cout << "Starting Kernel Driver." << std::endl << std::endl;
 			Hacks::StartKernelDriver();
-			std::cout << "\033[2J\033[1;1H";
-			std::cout << "Started Kernel Driver sucessfully!." << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(3));
 			break;
 		case '3':
 			Settings = Hacks::StartSettings(Settings);
 			break;
 		case '0':
-			std::cout << "Exiting." << std::endl;
-			exit = true;
+			exit = 1;
 			break;
 		default:
 			break;
-			
 		}
 	}
-	return 0;
 }
 
 #else
 #error This app can run only on PC with Windows OS.
 #endif
+
+/*
+#include "UI.h"
+
+int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
+{
+	UI::Render();
+}
+*/

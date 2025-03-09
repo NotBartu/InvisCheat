@@ -21,12 +21,99 @@ void read_memory_array(HANDLE driver_handle, uintptr_t address, T* buffer) {
 	}
 }
 namespace Hacks {
+	/*
+	namespace CS2Attachment {
+		HANDLE driver_handle = NULL;
+		std::uintptr_t client = NULL;
+
+		bool isCS2AttachmentInitialized = false;
+		int initializeCS2Attachment() {
+			if (!isCS2AttachmentInitialized) {
+				const DWORD pid = get_process_id(L"cs2.exe");
+
+				if (pid == 0) {
+					return 1;
+				}
+
+				driver_handle = CreateFileW(L"\\\\.\\CheatDriver", GENERIC_READ, 0, nullptr,
+					OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+				if (driver_handle == INVALID_HANDLE_VALUE) {
+					driver_handle = NULL;
+					return 1;
+				}
+
+				if (driver::attach_to_process(driver_handle, pid) == true) {
+					if (client = get_module_base(pid, L"client.dll"); client != 0) {
+						isCS2AttachmentInitialized = true;
+						return 0;
+					}
+					else {
+						return 1;
+					}
+				}
+				else {
+					return 1;
+				}
+			}
+			else {
+				return 0;
+			}
+		}
+		void closeCS2Attachment() {
+			CloseHandle(driver_handle);
+			client = NULL;
+			isCS2AttachmentInitialized = false;
+		}
+	}
+	*/
 	struct Setting {
 		bool ShowEntityInfo;
 		bool ShowBombInfo;
 	};
+	struct Entity {
+		uintptr_t Entity;
+		uintptr_t EntityController;
+		uintptr_t EntityControllerPawn;
+		uintptr_t EntityPawn;
+
+		char EntityName[32] = { 0 };
+		int EntityTeam;
+
+		bool EntityIsAlive;
+		int EntityHealth;
+		int EntityArmor;
+	
+		bool EntityIsOnGround;
+	};
+	/*
+	struct Entity {
+		uintptr_t Entity;
+		uintptr_t EntityController;
+		uintptr_t EntityControllerPawn;
+		uintptr_t EntityPawn;
+
+		char* EntityName;
+		int EntityTeam;
+		int EntityHealth;
+		int EntityArmor;
+	};
+	struct Bomb {
+		bool IsC4Planted;
+
+		uintptr_t PlantedC4;
+		bool IsBeingDefused;
+		bool IsDefused;
+		bool IsExploded;
+		int bombSite;
+	};
+	*/
+
 	void StartKernelDriver() {
 		start_process("C:\\InvisCheat\\kdmapper.exe C:\\InvisCheat\\KernelDriver.sys");
+		std::cout << "\033[2J\033[1;1H";
+		std::cout << "Started kernel driver successfully!" << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(2));
 	}
 	Setting StartSettings(Setting Settings) {
 		bool exit = false;
@@ -41,8 +128,6 @@ namespace Hacks {
 			std::cout << "2. Change ShowBombInfo value" << std::endl;
 			std::cout << "0. Exit" << std::endl;
 			std::cout << std::endl;
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 			std::cout << "Choice: "; const char choice = _getch(); std::cout << choice << std::endl;
 
@@ -85,9 +170,6 @@ namespace Hacks {
 
 		bool showConsole = true;
 
-		SetWindowLong(console, GWL_EXSTYLE, GetWindowLong(console, GWL_EXSTYLE) | WS_EX_LAYERED);
-		SetLayeredWindowAttributes(console, 0, 150, LWA_ALPHA);
-
 
 		std::cout << "\033[2J\033[1;1H";
 
@@ -114,13 +196,10 @@ namespace Hacks {
 			if (const std::uintptr_t client = get_module_base(pid, L"client.dll"); client != 0) {
 				std::cout << "Client found!" << std::endl;
 
-				std::this_thread::sleep_for(std::chrono::milliseconds(500));
+				std::this_thread::sleep_for(std::chrono::seconds(1)); 
 
-				INPUT hop;
-				hop.type = INPUT_KEYBOARD;
-				hop.ki.wVk = VK_APPS;
-				hop.ki.dwExtraInfo = 0;
-				hop.ki.time = 0;
+				SetWindowLong(console, GWL_EXSTYLE, GetWindowLong(console, GWL_EXSTYLE) | WS_EX_LAYERED);
+				SetLayeredWindowAttributes(console, 0, 150, LWA_ALPHA);
 
 				while (true) {
 					std::cout << "\033[2J\033[1;1H"; // Clearing console
@@ -152,41 +231,49 @@ namespace Hacks {
 						std::cout << "----------------------------------------------------------" << std::endl;
 						for (int i = 0; i < 64; i++)
 						{
-
 							const uintptr_t EntityList = driver::read_memory<std::uintptr_t>(driver_handle, client + cs2_dumper::offsets::client_dll::dwEntityList);
 
-							uintptr_t Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
-							if (Entity == 0)
+							Entity Entity;
+
+							Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
+							if (Entity.Entity == 0)
 								continue;
 
-							const uintptr_t entityController = driver::read_memory<std::uintptr_t>(driver_handle, Entity + (120) * (i & 0x1FF));
-							if (entityController == 0)
+							Entity.EntityController = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (i & 0x1FF));
+							if (Entity.EntityController == 0)
 								continue;
 
-							const uintptr_t entityControllerPawn = driver::read_memory<std::uintptr_t>(driver_handle, entityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_hPlayerPawn);
-							if (entityControllerPawn == 0)
+							Entity.EntityControllerPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_hPlayerPawn);
+							if (Entity.EntityControllerPawn == 0)
 								continue;
 
-							Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + (0x8 * ((entityControllerPawn & 0x7FFF) >> 9) + 16));
-							if (Entity == 0)
+							Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + (0x8 * ((Entity.EntityControllerPawn & 0x7FFF) >> 9) + 16));
+							if (Entity.Entity == 0)
 								continue;
 
-							const uintptr_t entityPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity + (120) * (entityControllerPawn & 0x1FF));
-							if (entityPawn == 0)
+							Entity.EntityPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (Entity.EntityControllerPawn & 0x1FF));
+							if (Entity.EntityPawn == 0)
 								continue;
 
-							const int entityTeam = driver::read_memory<int>(driver_handle, entityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
+							Entity.EntityTeam = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
 
-							const int entityHealth = driver::read_memory<int>(driver_handle, entityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iHealth);
-							if (entityHealth == 0)
+							Entity.EntityIsAlive = driver::read_memory<bool>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_bPawnIsAlive);
+							if (!Entity.EntityIsAlive)
 								continue;
-							const int entityArmor = driver::read_memory<int>(driver_handle, entityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_ArmorValue);
 
-							const bool isEntityInBuyZone = driver::read_memory<bool>(driver_handle, entityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_bInBuyZone);
-							const int isEntityInBombZone = driver::read_memory<int>(driver_handle, entityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_nWhichBombZone);
+							Entity.EntityHealth = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iHealth);
+							Entity.EntityArmor = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_ArmorValue);
+
+							Entity.EntityIsOnGround = 
+								driver::read_memory<uint32_t>(driver_handle, 
+									Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_fFlags)
+								& (1 << 0);
+
+							const bool isEntityInBuyZone = driver::read_memory<bool>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_bInBuyZone);
+							const int isEntityInBombZone = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_nWhichBombZone);
 							std::string entityPosition;
 							if (isEntityInBuyZone) {
-								switch (entityTeam) {
+								switch (Entity.EntityTeam) {
 								case 2:
 									entityPosition = " - at T spawn";
 									break;
@@ -212,19 +299,17 @@ namespace Hacks {
 								}
 							}
 
-							uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, entityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+							uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
 
-							char entityName[32] = { 0 };
-							read_memory_array(driver_handle, entityNameAddress, entityName);
+							read_memory_array(driver_handle, entityNameAddress, Entity.EntityName);
 
 							std::cout 
-								<< ((entityTeam == 2) ? Colors::BOLDBRIGHTYELLOW : (entityTeam == 3) ? Colors::BOLDBLUE : Colors::BOLDWHITE)
-								<< i << ". " << entityName << Colors::BOLDBRIGHTWHITE
-								<< " - " << ((entityHealth <= 20) ? Colors::BOLDBRIGHTRED : (entityHealth <= 70) ? Colors::BOLDBRIGHTYELLOW : Colors::BRIGHTGREEN)
-								<< entityHealth << Colors::BOLDBRIGHTWHITE << " HP - "
-								<< entityArmor << " Armor" 
+								<< ((Entity.EntityTeam == 2) ? Colors::BOLDBRIGHTYELLOW : (Entity.EntityTeam == 3) ? Colors::BOLDBLUE : Colors::BOLDWHITE)
+								<< i << ". " << Entity.EntityName << Colors::BOLDBRIGHTWHITE
+								<< " - " << ((Entity.EntityHealth <= 20) ? Colors::BOLDBRIGHTRED : (Entity.EntityHealth <= 70) ? Colors::BOLDBRIGHTYELLOW : Colors::BRIGHTGREEN)
+								<< Entity.EntityHealth << Colors::BOLDBRIGHTWHITE << " HP - "
+								<< Entity.EntityArmor << " Armor"
 								<< entityPosition << Colors::RESET << std::endl;
-
 						}
 					}
 
@@ -279,7 +364,8 @@ namespace Hacks {
 			CloseHandle(driver_handle);
 		}
 
-		ShowWindow(console, SW_NORMAL);
+		ShowWindow(console, SW_RESTORE);
+		SetForegroundWindow(console);
 		SetWindowLong(console, GWL_EXSTYLE, GetWindowLong(console, GWL_EXSTYLE) | WS_EX_LAYERED);
 		SetLayeredWindowAttributes(console, 0, 255, LWA_ALPHA);
 
@@ -287,4 +373,57 @@ namespace Hacks {
 		std::cout << "Press Enter to continue: ";
 		std::cin.get();
 	}
+	/*
+	Entity* GetAllEntities() {
+		if (CS2Attachment::initializeCS2Attachment() != 0) {
+			char unknownName[8] = "Unknown";
+			Entity Unknown[1] = { 0, 0, 0, 0, unknownName, 0, 0, 0 };
+			return Unknown; 
+		}
+		
+		Entity AllEntities[64] = { 0 };
+
+		int NextEntity = 0;
+		for (int i = 0; i < 64; i++)
+		{
+			const uintptr_t EntityList = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, CS2Attachment::client + cs2_dumper::offsets::client_dll::dwEntityList);
+			
+			uintptr_t Entity = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
+			if (Entity == 0)
+				continue;
+
+			const uintptr_t EntityController = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, Entity + (120) * (i & 0x1FF));
+			if (EntityController == 0)
+				continue;
+
+			const uintptr_t EntityControllerPawn = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_hPlayerPawn);
+			if (EntityControllerPawn == 0)
+				continue;
+
+			Entity = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, EntityList + (0x8 * ((EntityControllerPawn & 0x7FFF) >> 9) + 16));
+			if (Entity == 0)
+				continue;
+
+			const uintptr_t EntityPawn = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, Entity + (120) * (EntityControllerPawn & 0x1FF));
+			if (EntityPawn == 0)
+				continue;
+
+			const int EntityTeam = driver::read_memory<int>(CS2Attachment::driver_handle, EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
+
+			const int EntityHealth = driver::read_memory<int>(CS2Attachment::driver_handle, EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iHealth);
+			if (EntityHealth == 0)
+				continue;
+			const int EntityArmor = driver::read_memory<int>(CS2Attachment::driver_handle, EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_ArmorValue);
+
+			uintptr_t EntityNameAddress = driver::read_memory<std::uintptr_t>(CS2Attachment::driver_handle, EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+			char EntityName[32] = { 0 };
+			read_memory_array(CS2Attachment::driver_handle, EntityNameAddress, EntityName);
+
+			AllEntities[NextEntity] = { Entity, EntityController, EntityControllerPawn, EntityPawn, EntityName, EntityTeam, EntityHealth, EntityArmor };
+			NextEntity++;
+		}
+
+		return AllEntities;
+	}
+	*/
 };
