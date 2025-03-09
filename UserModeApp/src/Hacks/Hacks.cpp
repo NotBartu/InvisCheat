@@ -304,10 +304,10 @@ namespace Hacks {
 							read_memory_array(driver_handle, entityNameAddress, Entity.EntityName);
 
 							std::cout 
-								<< ((Entity.EntityTeam == 2) ? Colors::BOLDBRIGHTYELLOW : (Entity.EntityTeam == 3) ? Colors::BOLDBLUE : Colors::BOLDWHITE)
-								<< i << ". " << Entity.EntityName << Colors::BOLDBRIGHTWHITE
-								<< " - " << ((Entity.EntityHealth <= 20) ? Colors::BOLDBRIGHTRED : (Entity.EntityHealth <= 70) ? Colors::BOLDBRIGHTYELLOW : Colors::BRIGHTGREEN)
-								<< Entity.EntityHealth << Colors::BOLDBRIGHTWHITE << " HP - "
+								<< ((Entity.EntityTeam == 2) ? Colors::Foreground::BoldBright::YELLOW : (Entity.EntityTeam == 3) ? Colors::Foreground::Bold::BLUE : Colors::Foreground::Bold::WHITE)
+								<< i << ". " << Entity.EntityName << Colors::Foreground::BoldBright::WHITE
+								<< " - " << ((Entity.EntityHealth <= 20) ? Colors::Foreground::BoldBright::RED : (Entity.EntityHealth <= 70) ? Colors::Foreground::BoldBright::YELLOW : Colors::Foreground::Bright::GREEN)
+								<< Entity.EntityHealth << Colors::Foreground::BoldBright::WHITE << " HP - "
 								<< Entity.EntityArmor << " Armor"
 								<< entityPosition << Colors::RESET << std::endl;
 						}
@@ -347,13 +347,13 @@ namespace Hacks {
 								bombSiteText = "Unknown";
 
 							std::cout << "C4 - " 
-								<< (isExploded ? Colors::BOLDBRIGHTRED : isDefused ? Colors::BRIGHTGREEN : isBeingDefused ? Colors::BOLDBRIGHTBLUE : Colors::BOLDBRIGHTYELLOW) 
+								<< (isExploded ? Colors::Foreground::BoldBright::RED : isDefused ? Colors::Foreground::Bright::GREEN : isBeingDefused ? Colors::Foreground::BoldBright::BLUE : Colors::Foreground::BoldBright::YELLOW) 
 								<< isC4PlantedText << Colors::RESET 
-								<< " at " << Colors::BOLDBRIGHTWHITE << bombSiteText << Colors::RESET << std::endl;
+								<< " at " << Colors::Foreground::BoldBright::WHITE << bombSiteText << Colors::RESET << std::endl;
 						}
 						else {
 							isC4PlantedText = "Not planted";
-							std::cout << "C4 - " << Colors::BOLDBRIGHTWHITE << isC4PlantedText << Colors::RESET << std::endl;
+							std::cout << "C4 - " << Colors::Foreground::BoldBright::WHITE << isC4PlantedText << Colors::RESET << std::endl;
 						}
 					}
 
