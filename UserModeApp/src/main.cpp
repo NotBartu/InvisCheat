@@ -40,32 +40,9 @@ int main() {
 		std::cout << "0. Exit" << std::endl;
 		std::cout << std::endl;
 		
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-		std::cout << "Choice: "; const char choice = _getch(); std::cout << choice << std::endl;
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		
-		switch (choice) {
-		case '1':
-			Hacks::StartLoop(Settings);
-			break;
-		case '2':
-			std::cout << "Starting Kernel Driver." << std::endl << std::endl;
-			Hacks::StartKernelDriver();
-			std::cout << "\033[2J\033[1;1H";
-			std::cout << "Started Kernel Driver sucessfully!." << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(3));
-			break;
-		case '3':
-			Settings = Hacks::StartSettings(Settings);
-			break;
-		case '0':
-			std::cout << "Exiting." << std::endl;
-			exit = true;
-			break;
-		default:
-			break;
+int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
+{
+    UI::Render();
 			
 		}
 	}
