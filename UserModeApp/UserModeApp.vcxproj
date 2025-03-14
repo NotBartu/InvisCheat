@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -169,11 +169,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hacks\Hacks.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Extra\colors.h" />
+    <ClInclude Include="src\Extra\colors.hpp" />
+    <ClInclude Include="src\Extra\console.hpp" />
     <ClInclude Include="src\Hacks\CS2MEM\buttons.hpp" />
     <ClInclude Include="src\Hacks\CS2MEM\client_dll.hpp" />
     <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp" />
@@ -208,7 +208,10 @@
     <ClInclude Include="src\ftxui\screen\terminal.hpp" />
     <ClInclude Include="src\ftxui\util\autoreset.hpp" />
     <ClInclude Include="src\ftxui\util\ref.hpp" />
-    <ClInclude Include="src\Hacks\Hacks.h" />
+    <ClInclude Include="src\Hacks\Hacks.hpp" />
+    <ClInclude Include="src\Hacks\Modules\Bomb.hpp" />
+    <ClInclude Include="src\Hacks\Modules\Entity.hpp" />
+    <ClInclude Include="src\Hacks\Modules\Settings.hpp" />
     <ClInclude Include="src\Hacks\process.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

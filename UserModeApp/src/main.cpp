@@ -2,23 +2,21 @@
 
 #include <iostream>
 #include <Windows.h>
-#include <cstring>
 #include <conio.h>
 
 #include <chrono>
 #include <thread>
 
-#include "Hacks/Hacks.h"
-#include "Extra/colors.h"
+#include "Hacks/Hacks.hpp"
+#include "Extra/colors.hpp"
+#include "Extra/console.hpp"
 
 int main() {
-	HWND console = GetConsoleWindow();
-
-	MoveWindow(console, 1400, 270, 500, 540, TRUE);
-	SetWindowPos(console, HWND_TOPMOST, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-	ShowWindow(console, SW_NORMAL);
-	SetWindowLong(console, GWL_EXSTYLE, GetWindowLong(console, GWL_EXSTYLE) | WS_EX_LAYERED);
-	SetLayeredWindowAttributes(console, 0, 255, LWA_ALPHA);
+	MoveWindow(Console::hWnd, 1400, 270, 500, 540, TRUE);
+	SetWindowPos(Console::hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	ShowWindow(Console::hWnd, SW_NORMAL);
+	SetWindowLong(Console::hWnd, GWL_EXSTYLE, GetWindowLong(Console::hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+	SetLayeredWindowAttributes(Console::hWnd, 0, 255, LWA_ALPHA);
 
 	SetConsoleCP(CP_UTF8);
 	SetConsoleOutputCP(CP_UTF8);
@@ -29,11 +27,13 @@ int main() {
 	Settings.ShowEntityInfo = true;
 	Settings.ShowBombInfo = true;
 	while (true) {
-		std::cout << "\033[2J\033[1;1H";
+		Console::Clear();
 		if (exit == 1)
 			return 0;
-		else if (exit == 2)
+		else if (exit == 2) {
 			std::cout << "Exited with error." << std::endl;
+			return 0;
+		}
 
 		std::cout << "Press those keys to:" << std::endl;
 		std::cout << "1. Start hack" << std::endl;
@@ -47,7 +47,7 @@ int main() {
 		switch (choice)
 		{
 		case '1':
-			if (Hacks::StartLoop(Settings) == 0) 
+			if (Hacks::StartLoop(Settings) == 1) 
 				exit = 2;
 			break;
 		case '2':
