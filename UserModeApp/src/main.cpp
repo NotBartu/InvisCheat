@@ -28,11 +28,16 @@ int main() {
 	Settings.ShowBombInfo = true;
 	while (true) {
 		Console::Clear();
-		if (exit == 1)
+
+		switch (exit) 
+		{
+		case 1:
 			return 0;
-		else if (exit == 2) {
+			break;
+		case 2:
 			std::cout << "Exited with error." << std::endl;
 			return 0;
+			break;
 		}
 
 		std::cout << "Press those keys to:" << std::endl;
@@ -68,12 +73,3 @@ int main() {
 #else
 #error This app can run only on PC with Windows OS.
 #endif
-
-/*
-#include "UI.h"
-
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
-{
-	UI::Render();
-}
-*/

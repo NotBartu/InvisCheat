@@ -211,6 +211,7 @@
     <ClInclude Include="src\Hacks\Hacks.hpp" />
     <ClInclude Include="src\Hacks\Modules\Bomb.hpp" />
     <ClInclude Include="src\Hacks\Modules\Entity.hpp" />
+    <ClInclude Include="src\Hacks\Modules\Keys.hpp" />
     <ClInclude Include="src\Hacks\Modules\Settings.hpp" />
     <ClInclude Include="src\Hacks\process.hpp" />
   </ItemGroup>

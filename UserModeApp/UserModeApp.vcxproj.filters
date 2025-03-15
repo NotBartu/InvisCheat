@@ -143,5 +143,8 @@
     <ClInclude Include="src\Hacks\Modules\Settings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hacks\Modules\Keys.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

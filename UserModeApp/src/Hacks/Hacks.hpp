@@ -10,6 +10,7 @@
 #include "CS2MEM/client_dll.hpp"
 #include "CS2MEM/offsets.hpp"
 
+#include "Modules/Keys.hpp"
 #include "Modules/Settings.hpp"
 #include "Modules/Entity.hpp"
 #include "Modules/Bomb.hpp"
@@ -98,7 +99,7 @@ namespace Hacks {
 							Entity Entity = AllEntities[i];
 							std::cout
 								<< ((Entity.Team == 2) ? Colors::Foreground::BoldBright::YELLOW : (Entity.Team == 3) ? Colors::Foreground::Bold::BLUE : Colors::Foreground::Bold::WHITE)
-								<< i + 1 << ". " << Entity.Name << Colors::Foreground::BoldBright::WHITE
+								<< Entity.Name << Colors::Foreground::BoldBright::WHITE
 								<< " - " << ((Entity.Health <= 20) ? Colors::Foreground::BoldBright::RED : (Entity.Health <= 70) ? Colors::Foreground::BoldBright::YELLOW : Colors::Foreground::Bright::GREEN)
 								<< Entity.Health << Colors::Foreground::BoldBright::WHITE << " HP - "
 								<< Entity.Armor << " Armor"
@@ -133,6 +134,7 @@ namespace Hacks {
 					}
 
 					Console::PrintMinus();
+
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
 			}
