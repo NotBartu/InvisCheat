@@ -20,12 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hacks\driver.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hacks\process.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\ftxui\component\animation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -116,19 +110,25 @@
     <ClInclude Include="src\ftxui\util\ref.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp">
+    <ClInclude Include="src\Hacks\driver.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\CS2MEM\buttons.hpp">
+    <ClInclude Include="src\Hacks\process.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Hacks\CS2MEM\client_dll.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Hacks.hpp">
+    <ClInclude Include="src\Hacks\CS2MEM\buttons.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Extra\colors.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Extra\console.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Hacks\Modules\Bomb.hpp">
@@ -137,13 +137,13 @@
     <ClInclude Include="src\Hacks\Modules\Entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Extra\console.hpp">
+    <ClInclude Include="src\Hacks\Modules\Keys.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Hacks\Modules\Settings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Modules\Keys.hpp">
+    <ClInclude Include="src\Hacks\Hacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

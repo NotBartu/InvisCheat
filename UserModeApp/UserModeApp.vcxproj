@@ -174,10 +174,6 @@
   <ItemGroup>
     <ClInclude Include="src\Extra\colors.hpp" />
     <ClInclude Include="src\Extra\console.hpp" />
-    <ClInclude Include="src\Hacks\CS2MEM\buttons.hpp" />
-    <ClInclude Include="src\Hacks\CS2MEM\client_dll.hpp" />
-    <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp" />
-    <ClInclude Include="src\Hacks\driver.hpp" />
     <ClInclude Include="src\ftxui\component\animation.hpp" />
     <ClInclude Include="src\ftxui\component\captured_mouse.hpp" />
     <ClInclude Include="src\ftxui\component\component.hpp" />
@@ -208,6 +204,10 @@
     <ClInclude Include="src\ftxui\screen\terminal.hpp" />
     <ClInclude Include="src\ftxui\util\autoreset.hpp" />
     <ClInclude Include="src\ftxui\util\ref.hpp" />
+    <ClInclude Include="src\Hacks\CS2MEM\buttons.hpp" />
+    <ClInclude Include="src\Hacks\CS2MEM\client_dll.hpp" />
+    <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp" />
+    <ClInclude Include="src\Hacks\driver.hpp" />
     <ClInclude Include="src\Hacks\Hacks.hpp" />
     <ClInclude Include="src\Hacks\Modules\Bomb.hpp" />
     <ClInclude Include="src\Hacks\Modules\Entity.hpp" />

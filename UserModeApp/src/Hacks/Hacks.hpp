@@ -10,7 +10,6 @@
 #include "CS2MEM/client_dll.hpp"
 #include "CS2MEM/offsets.hpp"
 
-#include "Modules/Keys.hpp"
 #include "Modules/Settings.hpp"
 #include "Modules/Entity.hpp"
 #include "Modules/Bomb.hpp"
@@ -32,7 +31,6 @@ namespace Hacks {
 
 	int StartLoop(Setting Settings) {
 		bool showConsole = true;
-
 
 		Console::Clear();
 
