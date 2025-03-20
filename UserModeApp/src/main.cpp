@@ -1,5 +1,3 @@
-#ifdef _WIN32
-
 #include <iostream>
 #include <Windows.h>
 #include <conio.h>
@@ -12,6 +10,7 @@
 #include "Extra/console.hpp"
 
 int main() {
+	Console::EnableAnsi();
 	MoveWindow(Console::hWnd, 1400, 270, 500, 540, TRUE);
 	SetWindowPos(Console::hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 	ShowWindow(Console::hWnd, SW_NORMAL);
@@ -24,8 +23,8 @@ int main() {
 	int exit = 0;
 
 	Hacks::Setting Settings;
-	Settings.ShowEntityInfo = true;
-	Settings.ShowBombInfo = true;
+	Settings.UseRage = false;
+	Settings.UseBHOP = true;
 	while (true) {
 		Console::Clear();
 
@@ -68,8 +67,4 @@ int main() {
 			break;
 		}
 	}
-}
-
-#else
-#error This app can run only on PC with Windows OS.
-#endif
+}	

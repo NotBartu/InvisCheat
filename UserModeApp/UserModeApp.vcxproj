@@ -209,6 +209,7 @@
     <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp" />
     <ClInclude Include="src\Hacks\driver.hpp" />
     <ClInclude Include="src\Hacks\Hacks.hpp" />
+    <ClInclude Include="src\Hacks\Modules\Bhop.hpp" />
     <ClInclude Include="src\Hacks\Modules\Bomb.hpp" />
     <ClInclude Include="src\Hacks\Modules\Entity.hpp" />
     <ClInclude Include="src\Hacks\Modules\Keys.hpp" />

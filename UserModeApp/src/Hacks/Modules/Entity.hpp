@@ -8,10 +8,10 @@
 #include "../driver.hpp"
 
 struct Entity {
-	uintptr_t Entity;
-	uintptr_t EntityController;
-	uintptr_t EntityControllerPawn;
-	uintptr_t EntityPawn;
+	std::uintptr_t Entity;
+	std::uintptr_t EntityController;
+	std::uintptr_t EntityControllerPawn;
+	std::uintptr_t EntityPawn;
 
 	char Name[32] = { 0 };
 	int Team;
@@ -61,12 +61,11 @@ std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintp
 		Entity.Armor = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_ArmorValue);
 
 		Entity.IsOnGround =
-			driver::read_memory<uint32_t>(driver_handle,
+			driver::read_memory<std::uint32_t>(driver_handle,
 				Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_fFlags)
 			& (1 << 0);
 
-
-		uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+		std::uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
 
 		driver::read_memory_array(driver_handle, entityNameAddress, Entity.Name);
 

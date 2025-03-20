@@ -7,6 +7,12 @@ namespace Console {
     HWND hWnd = GetConsoleWindow();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+    void EnableAnsi() {
+        DWORD dwMode = 0;
+        GetConsoleMode(hConsole, &dwMode);
+        SetConsoleMode(hConsole, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    }
+
     void Clear() {
         std::cout << "\033[2J\033[1;1H";
     }

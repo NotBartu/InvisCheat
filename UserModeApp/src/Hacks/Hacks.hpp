@@ -8,11 +8,13 @@
 #include <thread>
 
 #include "CS2MEM/client_dll.hpp"
+#include "CS2MEM/buttons.hpp"
 #include "CS2MEM/offsets.hpp"
 
 #include "Modules/Settings.hpp"
 #include "Modules/Entity.hpp"
 #include "Modules/Bomb.hpp"
+#include "Modules/Bhop.hpp"
 
 #include "driver.hpp"
 #include "process.hpp"
@@ -62,6 +64,19 @@ namespace Hacks {
 				SetWindowLong(Console::hWnd, GWL_EXSTYLE, GetWindowLong(Console::hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
 				SetLayeredWindowAttributes(Console::hWnd, 0, 150, LWA_ALPHA);
 
+				std::atomic_bool bhop_cancellation_token = false;
+
+				if (Settings.UseBHOP) {
+					if (Settings.UseRage) {
+						std::thread Thread(StartRageBhop, std::ref(bhop_cancellation_token), driver_handle, client);
+						Thread.detach();
+					}
+					else {
+						std::thread Thread(StartLegitBhop, std::ref(bhop_cancellation_token), driver_handle, client);
+						Thread.detach();
+					}
+				}
+
 				while (true) {
 					Console::Clear();
 					if (GetAsyncKeyState(VK_END))
@@ -76,10 +91,10 @@ namespace Hacks {
 						showConsole = !showConsole;
 					}
 
-					const auto localEntityPawn = driver::read_memory<std::uintptr_t>
+					const std::uintptr_t localEntityPawn = driver::read_memory<std::uintptr_t>
 						(driver_handle, client + cs2_dumper::offsets::client_dll::dwLocalPlayerPawn);
 
-					const auto localEntityTeam = driver::read_memory<std::uintptr_t>
+					const std::uintptr_t localEntityTeam = driver::read_memory<std::uintptr_t>
 						(driver_handle, localEntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
 
 					if (localEntityPawn == 0 || localEntityTeam == 0) {
@@ -88,13 +103,14 @@ namespace Hacks {
 						continue;
 					}
 
-					if (Settings.ShowEntityInfo) {
+					{ // Show Entities
 						Console::PrintMinus();
 
 						std::vector <Entity> AllEntities = GetAllEntities(driver_handle, client);
 
 						for (int i = 0; i < AllEntities.size(); i++) {
 							Entity Entity = AllEntities[i];
+
 							std::cout
 								<< ((Entity.Team == 2) ? Colors::Foreground::BoldBright::YELLOW : (Entity.Team == 3) ? Colors::Foreground::Bold::BLUE : Colors::Foreground::Bold::WHITE)
 								<< Entity.Name << Colors::Foreground::BoldBright::WHITE
@@ -105,7 +121,7 @@ namespace Hacks {
 						}
 					}
 
-					if (Settings.ShowBombInfo) {
+					{ // Show bomb
 						Console::PrintMinus();
 						Bomb Bomb = GetBomb(driver_handle, client);
 
@@ -130,11 +146,11 @@ namespace Hacks {
 							std::cout << "C4 - " << Colors::Foreground::BoldBright::WHITE << "Not planted" << Colors::RESET << std::endl;
 						}
 					}
-
 					Console::PrintMinus();
 
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
+				bhop_cancellation_token = true;
 			}
 			CloseHandle(driver_handle);
 		}

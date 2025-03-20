@@ -146,5 +146,8 @@
     <ClInclude Include="src\Hacks\Hacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hacks\Modules\Bhop.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

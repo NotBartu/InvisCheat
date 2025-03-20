@@ -68,7 +68,7 @@ namespace driver {
 		Request r;
 		r.target = reinterpret_cast<PVOID>(addr);
 		r.buffer = (PVOID)&value;
-		r.size == sizeof(T);
+		r.size = sizeof(T);
 
 		DeviceIoControl(driver_handle, codes::write, &r, sizeof(r),
 			&r, sizeof(r), nullptr, nullptr);
