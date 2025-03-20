@@ -40,8 +40,7 @@ jobs:
         shell: powershell
 
       - name: Upload build artifact
-        if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: build_output
           path: build_output.zip
@@ -51,7 +50,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: build_output
           path: .
