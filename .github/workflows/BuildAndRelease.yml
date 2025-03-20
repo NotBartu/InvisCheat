@@ -8,8 +8,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    outputs:
-      artifact-path: ${{ steps.package.outputs.artifact-path }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,7 +29,6 @@ jobs:
           }
 
       - name: Package executables
-        id: package
         run: |
           $outDir = "build_output"
           if(Test-Path $outDir){ Remove-Item $outDir -Recurse -Force }
@@ -39,12 +36,11 @@ jobs:
           Get-ChildItem -Path . -Recurse -Include *.exe | ForEach-Object {
             Copy-Item $_.FullName -Destination $outDir -Force
           }
-          Compress-Archive -Path $outDir\* -DestinationPath build_output.zip
-          Write-Output "build_output.zip" > artifact.txt
-          cat artifact.txt
+          Compress-Archive -Path "$outDir\*" -DestinationPath build_output.zip
         shell: powershell
 
       - name: Upload build artifact
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: build_output
