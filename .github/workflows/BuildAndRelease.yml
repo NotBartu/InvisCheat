@@ -3,9 +3,7 @@ name: Build and Release
 on:
   push:
     branches:
-      - main
-    tags:
-      - 'v*'
+      - '**'
 
 jobs:
   build:
@@ -38,7 +36,6 @@ jobs:
           $outDir = "build_output"
           if(Test-Path $outDir){ Remove-Item $outDir -Recurse -Force }
           New-Item -ItemType Directory -Path $outDir | Out-Null
-          # Предполагается, что исполняемые файлы лежат в подпапках bin\Release рядом с .vcxproj
           Get-ChildItem -Path . -Recurse -Include *.exe | ForEach-Object {
             Copy-Item $_.FullName -Destination $outDir -Force
           }
@@ -56,7 +53,6 @@ jobs:
   release:
     needs: build
     runs-on: windows-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v3
@@ -70,8 +66,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
           draft: false
           prerelease: false
 
