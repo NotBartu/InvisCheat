@@ -1,4 +1,4 @@
-#pragma once
+#include "Hacks.h"
 
 #include <iostream>
 #include <vector>
@@ -11,16 +11,16 @@
 #include "CS2MEM/buttons.hpp"
 #include "CS2MEM/offsets.hpp"
 
-#include "Modules/Settings.hpp"
-#include "Modules/Entity.hpp"
-#include "Modules/Bomb.hpp"
-#include "Modules/Bhop.hpp"
+#include "Modules/Settings.h"
+#include "Modules/Entity.h"
+#include "Modules/Bomb.h"
+#include "Modules/Bhop.h"
 
 #include "driver.hpp"
 #include "process.hpp"
 
 #include "../Extra/colors.hpp"
-#include "../Extra/console.hpp"
+#include "../Extra/console.h"
 
 namespace Hacks {
 	void StartKernelDriver() {

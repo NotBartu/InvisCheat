@@ -31,7 +31,7 @@ namespace driver {
 		SIZE_T return_size;
 	};
 
-	bool attach_to_process(HANDLE driver_handle, const DWORD pid) {
+	inline bool attach_to_process(HANDLE driver_handle, const DWORD pid) {
 		Request r;
 		r.process_id = reinterpret_cast<HANDLE>(pid);
 
@@ -40,7 +40,7 @@ namespace driver {
 	}
 
 	template <class T>
-	T read_memory(HANDLE driver_handle, const std::uintptr_t addr) {
+	inline T read_memory(HANDLE driver_handle, const std::uintptr_t addr) {
 		T temp = {};
 
 		Request r;
@@ -55,7 +55,7 @@ namespace driver {
 	}
 
 	template<typename T>
-	void read_memory_array(HANDLE driver_handle, uintptr_t address, T* buffer) {
+	inline void read_memory_array(HANDLE driver_handle, uintptr_t address, T* buffer) {
 		size_t size = sizeof(buffer);
 		for (size_t i = 0; i < size; ++i) {
 			buffer[i] = driver::read_memory<char>(driver_handle, address + i);
@@ -64,7 +64,7 @@ namespace driver {
 	}
 
 	template <class T>
-	void write_memory(HANDLE driver_handle, const std::uintptr_t addr, const T& value) {
+	inline void write_memory(HANDLE driver_handle, const std::uintptr_t addr, const T& value) {
 		Request r;
 		r.target = reinterpret_cast<PVOID>(addr);
 		r.buffer = (PVOID)&value;

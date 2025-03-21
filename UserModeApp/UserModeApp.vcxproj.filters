@@ -18,6 +18,27 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hacks\Modules\Keys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hacks\Modules\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hacks\Hacks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hacks\Modules\Bhop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hacks\Modules\Bomb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hacks\Modules\Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Extra\console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ftxui\component\animation.hpp">
@@ -128,25 +149,25 @@
     <ClInclude Include="src\Extra\colors.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Extra\console.hpp">
+    <ClInclude Include="src\Extra\console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Modules\Bomb.hpp">
+    <ClInclude Include="src\Hacks\Modules\Bomb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Modules\Entity.hpp">
+    <ClInclude Include="src\Hacks\Modules\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Modules\Keys.hpp">
+    <ClInclude Include="src\Hacks\Modules\Keys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Modules\Settings.hpp">
+    <ClInclude Include="src\Hacks\Modules\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Hacks.hpp">
+    <ClInclude Include="src\Hacks\Hacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hacks\Modules\Bhop.hpp">
+    <ClInclude Include="src\Hacks\Modules\Bhop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

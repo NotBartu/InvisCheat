@@ -1,4 +1,4 @@
-#pragma once
+#include "Settings.h"
 
 #include <iostream>
 #include <conio.h>
@@ -6,15 +6,9 @@
 #include <chrono>
 #include <thread>
 
-#include "../../Extra/console.hpp"
+#include "../../Extra/console.h"
 
 namespace Hacks {
-	struct Setting {
-		bool UseRage;
-		bool UseBHOP;
-	};
-
-
 	Setting StartSettings(Setting Settings) {
 		bool exit = false;
 

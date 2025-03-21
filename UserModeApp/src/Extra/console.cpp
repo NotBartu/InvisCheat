@@ -1,12 +1,9 @@
-#pragma once
+#include "console.h"
 
 #include <iostream>
 #include <Windows.h>
 
 namespace Console {
-    HWND hWnd = GetConsoleWindow();
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
     void EnableAnsi() {
         DWORD dwMode = 0;
         GetConsoleMode(hConsole, &dwMode);

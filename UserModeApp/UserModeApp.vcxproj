@@ -169,11 +169,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Extra\console.cpp" />
+    <ClCompile Include="src\Hacks\Hacks.cpp" />
+    <ClCompile Include="src\Hacks\Modules\Bhop.cpp" />
+    <ClCompile Include="src\Hacks\Modules\Bomb.cpp" />
+    <ClCompile Include="src\Hacks\Modules\Entity.cpp" />
+    <ClCompile Include="src\Hacks\Modules\Keys.cpp" />
+    <ClCompile Include="src\Hacks\Modules\Settings.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Extra\colors.hpp" />
-    <ClInclude Include="src\Extra\console.hpp" />
+    <ClInclude Include="src\Extra\console.h" />
     <ClInclude Include="src\ftxui\component\animation.hpp" />
     <ClInclude Include="src\ftxui\component\captured_mouse.hpp" />
     <ClInclude Include="src\ftxui\component\component.hpp" />
@@ -208,12 +215,12 @@
     <ClInclude Include="src\Hacks\CS2MEM\client_dll.hpp" />
     <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp" />
     <ClInclude Include="src\Hacks\driver.hpp" />
-    <ClInclude Include="src\Hacks\Hacks.hpp" />
-    <ClInclude Include="src\Hacks\Modules\Bhop.hpp" />
-    <ClInclude Include="src\Hacks\Modules\Bomb.hpp" />
-    <ClInclude Include="src\Hacks\Modules\Entity.hpp" />
-    <ClInclude Include="src\Hacks\Modules\Keys.hpp" />
-    <ClInclude Include="src\Hacks\Modules\Settings.hpp" />
+    <ClInclude Include="src\Hacks\Hacks.h" />
+    <ClInclude Include="src\Hacks\Modules\Bhop.h" />
+    <ClInclude Include="src\Hacks\Modules\Bomb.h" />
+    <ClInclude Include="src\Hacks\Modules\Entity.h" />
+    <ClInclude Include="src\Hacks\Modules\Keys.h" />
+    <ClInclude Include="src\Hacks\Modules\Settings.h" />
     <ClInclude Include="src\Hacks\process.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,4 @@
-#pragma once
-
+#include "Keys.h"
 #include <Windows.h>
 
 void SendKey(int vk, BOOL bExtended) {

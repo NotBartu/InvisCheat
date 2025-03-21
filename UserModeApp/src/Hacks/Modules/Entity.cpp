@@ -1,27 +1,10 @@
-#pragma once
-#include <iostream>
+#include "Entity.h"
 #include <vector>
 
 #include "../CS2MEM/client_dll.hpp"
 #include "../CS2MEM/offsets.hpp"
 
 #include "../driver.hpp"
-
-struct Entity {
-	std::uintptr_t Entity;
-	std::uintptr_t EntityController;
-	std::uintptr_t EntityControllerPawn;
-	std::uintptr_t EntityPawn;
-
-	char Name[32] = { 0 };
-	int Team;
-
-	bool IsAlive;
-	int Health;
-	int Armor;
-
-	bool IsOnGround;
-};
 
 std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintptr_t client) {
 	std::vector <Entity> Entities;

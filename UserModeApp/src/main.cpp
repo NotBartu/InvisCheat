@@ -5,9 +5,10 @@
 #include <chrono>
 #include <thread>
 
-#include "Hacks/Hacks.hpp"
+#include "Hacks/Hacks.h"
+#include "Hacks/Modules/Settings.h"
 #include "Extra/colors.hpp"
-#include "Extra/console.hpp"
+#include "Extra/console.h"
 
 int main() {
 	Console::EnableAnsi();
