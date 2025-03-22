@@ -55,8 +55,7 @@ namespace driver {
 	}
 
 	template<typename T>
-	inline void read_memory_array(HANDLE driver_handle, uintptr_t address, T* buffer) {
-		size_t size = sizeof(buffer);
+	inline void read_memory_array(HANDLE driver_handle, uintptr_t address, T* buffer, size_t size = sizeof(buffer)) {
 		for (size_t i = 0; i < size; ++i) {
 			buffer[i] = driver::read_memory<char>(driver_handle, address + i);
 			if (buffer[i] == '\0') break;

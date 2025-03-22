@@ -8,7 +8,7 @@ struct Entity {
 	std::uintptr_t EntityControllerPawn;
 	std::uintptr_t EntityPawn;
 
-	char Name[32] = { 0 };
+	char Name[16] = { 0 };
 	int Team;
 
 	bool IsAlive;

@@ -50,7 +50,7 @@ std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintp
 
 		std::uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
 
-		driver::read_memory_array(driver_handle, entityNameAddress, Entity.Name);
+		driver::read_memory_array(driver_handle, entityNameAddress, Entity.Name, 16);
 
 		Entities.push_back(Entity);
 	}

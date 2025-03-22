@@ -1,7 +1,7 @@
 
 # InvisCheat
 
-Legit __undetectable__ cheat for CS2
+External __undetectable__ cheat for CS2
 
 ## Features
 
