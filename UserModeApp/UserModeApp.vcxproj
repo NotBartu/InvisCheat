@@ -103,12 +103,13 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <OmitFramePointers />
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/Zc:char8_t- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,14 +123,15 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <OmitFramePointers />
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/Zc:char8_t- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -140,12 +142,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/Zc:char8_t- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,29 +161,36 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/Zc:char8_t- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Extra\console.cpp" />
-    <ClCompile Include="src\Hacks\Hacks.cpp" />
+    <ClCompile Include="src\gui.cpp" />
     <ClCompile Include="src\Hacks\Modules\Bhop.cpp" />
     <ClCompile Include="src\Hacks\Modules\Bomb.cpp" />
     <ClCompile Include="src\Hacks\Modules\Entity.cpp" />
     <ClCompile Include="src\Hacks\Modules\Keys.cpp" />
-    <ClCompile Include="src\Hacks\Modules\Settings.cpp" />
+    <ClCompile Include="src\ImGui\imgui.cpp" />
+    <ClCompile Include="src\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="src\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_dx10.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="src\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Extra\colors.hpp" />
-    <ClInclude Include="src\Extra\console.h" />
     <ClInclude Include="src\ftxui\component\animation.hpp" />
     <ClInclude Include="src\ftxui\component\captured_mouse.hpp" />
     <ClInclude Include="src\ftxui\component\component.hpp" />
@@ -211,17 +221,32 @@
     <ClInclude Include="src\ftxui\screen\terminal.hpp" />
     <ClInclude Include="src\ftxui\util\autoreset.hpp" />
     <ClInclude Include="src\ftxui\util\ref.hpp" />
+    <ClInclude Include="src\gui.h" />
     <ClInclude Include="src\Hacks\CS2MEM\buttons.hpp" />
     <ClInclude Include="src\Hacks\CS2MEM\client_dll.hpp" />
     <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp" />
     <ClInclude Include="src\Hacks\driver.hpp" />
-    <ClInclude Include="src\Hacks\Hacks.h" />
     <ClInclude Include="src\Hacks\Modules\Bhop.h" />
     <ClInclude Include="src\Hacks\Modules\Bomb.h" />
     <ClInclude Include="src\Hacks\Modules\Entity.h" />
     <ClInclude Include="src\Hacks\Modules\Keys.h" />
     <ClInclude Include="src\Hacks\Modules\Settings.h" />
     <ClInclude Include="src\Hacks\process.hpp" />
+    <ClInclude Include="src\ImGui\Colors.h" />
+    <ClInclude Include="src\ImGui\Icons.h" />
+    <ClInclude Include="src\ImGui\imconfig.h" />
+    <ClInclude Include="src\ImGui\imgui.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_dx10.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_dx12.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_dx9.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="src\ImGui\imgui_internal.h" />
+    <ClInclude Include="src\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="src\ImGui\imstb_textedit.h" />
+    <ClInclude Include="src\ImGui\imstb_truetype.h" />
+    <ClInclude Include="src\Util\Calculate.h" />
+    <ClInclude Include="src\Util\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

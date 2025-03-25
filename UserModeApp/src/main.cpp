@@ -1,71 +1,49 @@
-#include <iostream>
-#include <Windows.h>
-#include <conio.h>
+#include "gui.h"
 
-#include <chrono>
 #include <thread>
+#include "Hacks/driver.hpp"
+#include "Hacks/process.hpp"
 
-#include "Hacks/Hacks.h"
-#include "Hacks/Modules/Settings.h"
-#include "Extra/colors.hpp"
-#include "Extra/console.h"
+#include "Hacks/Modules/Bhop.h"
 
-int main() {
-	Console::EnableAnsi();
-	MoveWindow(Console::hWnd, 1400, 270, 500, 540, TRUE);
-	SetWindowPos(Console::hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-	ShowWindow(Console::hWnd, SW_NORMAL);
-	SetWindowLong(Console::hWnd, GWL_EXSTYLE, GetWindowLong(Console::hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-	SetLayeredWindowAttributes(Console::hWnd, 0, 255, LWA_ALPHA);
+int __stdcall wWinMain(
+	HINSTANCE instance,
+	HINSTANCE previousInstance,
+	PWSTR arguments,
+	int commandShow)
+{
+	// create gui
+	gui::CreateHWindow("Invis");
+	gui::CreateDevice();
+	gui::CreateImGui();
 
-	SetConsoleCP(CP_UTF8);
-	SetConsoleOutputCP(CP_UTF8);
-
-	int exit = 0;
-
-	Hacks::Setting Settings;
-	Settings.UseRage = false;
-	Settings.UseBHOP = true;
-	while (true) {
-		Console::Clear();
-
-		switch (exit) 
-		{
-		case 1:
-			return 0;
-			break;
-		case 2:
-			std::cout << "Exited with error." << std::endl;
-			return 0;
-			break;
-		}
-
-		std::cout << "Press those keys to:" << std::endl;
-		std::cout << "1. Start hack" << std::endl;
-		std::cout << "2. Start Kernel Driver" << std::endl;
-		std::cout << "3. Open settings menu" << std::endl;
-		std::cout << "0. Exit" << std::endl;
-		std::cout << std::endl;
-
-		std::cout << "Choice: "; const char choice = _getch(); std::cout << choice << std::endl;
-		
-		switch (choice)
-		{
-		case '1':
-			if (Hacks::StartLoop(Settings) == 1) 
-				exit = 2;
-			break;
-		case '2':
-			Hacks::StartKernelDriver();
-			break;
-		case '3':
-			Settings = Hacks::StartSettings(Settings);
-			break;
-		case '0':
-			exit = 1;
-			break;
-		default:
-			break;
+	gui::pid = get_process_id(L"cs2.exe");
+	gui::driver_handle = CreateFileW(L"\\\\.\\CheatDriver", GENERIC_READ, 0, nullptr,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (gui::pid != 0 && gui::driver_handle != INVALID_HANDLE_VALUE) {
+		if (driver::attach_to_process(gui::driver_handle, gui::pid) == true) {
+			gui::isAttachmentSuccessful = true;
+			gui::client = get_module_base(gui::pid, L"client.dll");
 		}
 	}
-}	
+	
+	std::thread Thread(StartBhop, std::ref(gui::UseRageToken), std::ref(gui::UseBhopToken), std::ref(gui::driver_handle), std::ref(gui::client));
+	Thread.detach();
+
+
+	while (gui::isRunning)
+	{
+		gui::BeginRender();
+		gui::Render();
+		gui::EndRender();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+
+	// destroy gui
+	gui::DestroyImGui();
+	gui::DestroyDevice();
+	gui::DestroyHWindow();
+
+	return EXIT_SUCCESS;
+}

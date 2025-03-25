@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 
-VOID start_process(const char* command)
+inline VOID start_process(const char* command)
 {
 	STARTUPINFOA si = { sizeof(STARTUPINFOA) };
 	PROCESS_INFORMATION pi;
