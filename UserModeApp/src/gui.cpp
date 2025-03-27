@@ -6,6 +6,7 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_dx9.h"
 #include "ImGui/imgui_impl_win32.h"
+#include "ImGui/Themes.h"
 #include "ImGui/Icons.h"
 #include "ImGui/Colors.h"
 
@@ -49,6 +50,7 @@ void ChangeWindowTransparency() {
 
 	SetWindowLong(gui::window, GWL_EXSTYLE, exStyle);
 	RedrawWindow(gui::window, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME);
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 static LRESULT WindowProcess(
@@ -202,21 +204,21 @@ void gui::CreateImGui() noexcept
 
 	io.IniFilename = "Invis.ini";
 
-	ImGui::StyleColorsDark();
+	ComfyStyle();
 
 	ImGui_ImplWin32_Init(window);
 	ImGui_ImplDX9_Init(device);
 
-	// Settings
-	Settings.UseRage = false;
-
-	// Esp
+	// Player Esp
 	Settings.UseEsp = false;
 	Settings.UseBoxEsp = false;
 	Settings.UseSkeletonEsp = true;
 	Settings.UseHeadEsp = true;
 	Settings.EspShowPlayerName = true;
 	Settings.EspShowPlayerHealth = true;
+
+	// Bomb Esp
+	Settings.UseBombEsp = true;
 
 	// Other
 	Settings.ShowSight = true;
@@ -279,11 +281,9 @@ void gui::Render() noexcept
 	if (!StartWindow && !SettingsWindow && !HacksWindow)
 		StartWindow = true;
 	if (!HacksWindow) {
-		UseRageToken = false;
 		UseBhopToken = false;
 	}
 	else {
-		UseRageToken = Settings.UseRage;
 		UseBhopToken = Settings.UseBHOP;
 	}
 
@@ -380,10 +380,6 @@ void gui::Render() noexcept
 			ImGuiWindowFlags_NoMove
 		);
 
-		ImGui::Checkbox("Use Rage", &Settings.UseRage);
-
-		ImGui::Separator();
-
 		ImGui::Checkbox("Use Esp", &Settings.UseEsp);
 		if (Settings.UseEsp) {
 			ImGui::Checkbox("Use Box Esp", &Settings.UseBoxEsp);
@@ -392,6 +388,10 @@ void gui::Render() noexcept
 			ImGui::Checkbox("Show Player Name", &Settings.EspShowPlayerName);
 			ImGui::Checkbox("Show Player Health", &Settings.EspShowPlayerHealth);
 		}
+
+		ImGui::Separator();
+
+		ImGui::Checkbox("Use Bomb Esp", &Settings.UseBombEsp);
 
 		ImGui::Separator();
 
@@ -421,6 +421,9 @@ void gui::Render() noexcept
 
 		const std::uintptr_t localEntityTeam = driver::read_memory<std::uintptr_t>
 			(driver_handle, localEntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
+
+		const Vector3 localEntityOrigin = driver::read_memory<Vector3>
+			(driver_handle, localEntityPawn + cs2_dumper::schemas::client_dll::C_BasePlayerPawn::m_vOldOrigin);
 
 		std::vector <Entity> AllEntities = GetAllEntities(driver_handle, client);
 
@@ -472,6 +475,12 @@ void gui::Render() noexcept
 			}
 		}
 
+		ImGui::Separator();
+
+		ImGui::Text("This Window"); 
+		ImGui::SameLine(); ImGui::Text(" - "); ImGui::SameLine();
+		ImGui::TextColored(gui::windowTransparent ? Colors::Green : Colors::Red, gui::windowTransparent ? "Transparent" : "Not Transparent");
+
 		ImGui::End();
 		
 		ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -479,6 +488,9 @@ void gui::Render() noexcept
 		ImGui::Begin("Overlay", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoBackground);
 
 		auto pDrawList = ImGui::GetWindowDrawList();
+
+		const HWND ActiveWindow = GetActiveWindow();
+
 
 		if (localEntityPawn != 0) {
 			if (Settings.ShowSight) {
@@ -489,10 +501,8 @@ void gui::Render() noexcept
 				pDrawList->AddLine(ImVec2(WIDTH / 2, HEIGHT / 2 + 5), ImVec2(WIDTH / 2, HEIGHT / 2 + 10), ImColor(0, 0, 255), 2.0f);
 			}
 
-
+			view_matrix_t view_matrix = driver::read_memory<view_matrix_t>(driver_handle, client + cs2_dumper::offsets::client_dll::dwViewMatrix);
 			if (Settings.UseEsp) {
-				view_matrix_t view_matrix = driver::read_memory<view_matrix_t>(driver_handle, client + cs2_dumper::offsets::client_dll::dwViewMatrix);
-
 				for (int i = 0; i < AllEntities.size(); i++) {
 					Entity Entity = AllEntities[i];
 
@@ -505,7 +515,11 @@ void gui::Render() noexcept
 					const float height = screenPos.y - screenHead.y;
 					const float width = height / 2.4f;
 
-					if (Settings.UseBoxEsp) pDrawList->AddRect(ImVec2(screenPos.x - width / 2, screenHead.y), ImVec2(screenHead.x + width / 2, screenHead.y + height), Entity.Team == 2 ? ImColor(255, 0, 0) : Entity.Team == 3 ? ImColor(0, 0, 255) : ImColor(255, 255, 255));
+					if (Settings.UseBoxEsp) 
+						pDrawList->AddRect(
+							ImVec2(screenPos.x - width / 2, screenHead.y), 
+							ImVec2(screenHead.x + width / 2, screenHead.y + height), 
+							Entity.Team == 2 ? ImColor(255, 0, 0) : Entity.Team == 3 ? ImColor(0, 0, 255) : ImColor(255, 255, 255));
 					if (Settings.UseSkeletonEsp) {
 						for (const auto& Connection : BoneConnections) {
 							const std::string& BoneFrom = Connection.first;
@@ -519,11 +533,14 @@ void gui::Render() noexcept
 								Entity.Team == 2 ? ImColor(255, 0, 0) : Entity.Team == 3 ? ImColor(0, 0, 255) : ImColor(255, 255, 255));
 						}
 					}
-					if (Settings.UseHeadEsp) 
+					if (Settings.UseHeadEsp) {
+						Vector3 HeadPos = ReadHead(driver_handle, Entity.BoneArray, view_matrix);
+
 						pDrawList->AddCircle(
-							ImVec2(screenHead.x, screenHead.y + height / 6), 
-							width / 5, 
+							ImVec2(HeadPos.x, HeadPos.y),
+							width / 5,
 							Entity.Team == 2 ? ImColor(255, 0, 0) : Entity.Team == 3 ? ImColor(0, 0, 255) : ImColor(255, 255, 255));
+					}
 					if (Settings.EspShowPlayerName) 
 						pDrawList->AddText(
 							Font, 20, 
@@ -536,6 +553,33 @@ void gui::Render() noexcept
 							ImVec2(screenHead.x + (width / 2 + 5), screenHead.y + 20), 
 							Entity.Health <= 30 ? ImColor(255, 0, 0) : Entity.Health <= 60 ? ImColor(255, 255, 0) : ImColor(0, 255, 0), 
 							std::to_string(Entity.Health).c_str());
+				}
+			}
+
+			if (Settings.UseBombEsp) {
+				Bomb Bomb = GetBomb(driver_handle, client);
+
+				if (Bomb.IsPlanted) {
+					const Vector3 screenPos = world_to_screen(&Bomb.Origin, view_matrix);
+
+					if (screenPos.z >= 0.01f) {
+
+						const float Distance = std::round(localEntityOrigin.calculate_distance(screenPos) / 400.0f);
+
+						const float height = 14 - Distance;
+						const float width = height * 1.4f;
+
+						pDrawList->AddRect(
+							ImVec2(screenPos.x - width / 2, screenPos.y - height / 2),
+							ImVec2(screenPos.x + width / 2, screenPos.y + height / 2),
+							Bomb.IsExploded ? ImColor(255, 0, 0) : Bomb.IsDefused ? ImColor(0, 255, 0) : Bomb.IsBeingDefused ? ImColor(0, 0, 255) : ImColor(255, 255, 0));
+
+						pDrawList->AddText(
+							Font, 20,
+							ImVec2(screenPos.x + (width / 2 + 5), screenPos.y),
+							Bomb.IsExploded ? ImColor(255, 0, 0) : Bomb.IsDefused ? ImColor(0, 255, 0) : Bomb.IsBeingDefused ? ImColor(0, 0, 255) : ImColor(255, 255, 0),
+							"C4");
+					}
 				}
 			}
 		}

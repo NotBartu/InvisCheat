@@ -54,6 +54,5 @@ namespace gui
 	inline std::uintptr_t client = 0;
 
 	// thread tokens
-	inline std::atomic_bool UseRageToken = false;
 	inline std::atomic_bool UseBhopToken = false;
 }

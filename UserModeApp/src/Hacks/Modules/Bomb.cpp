@@ -21,6 +21,9 @@ Bomb GetBomb(const HANDLE driver_handle, const std::uintptr_t client)
 		Bomb.IsBeingDefused = driver::read_memory<bool>(driver_handle, Bomb.PlantedC4 + cs2_dumper::schemas::client_dll::C_PlantedC4::m_bBeingDefused);
 		Bomb.IsDefused = driver::read_memory<bool>(driver_handle, Bomb.PlantedC4 + cs2_dumper::schemas::client_dll::C_PlantedC4::m_bBombDefused);
 		Bomb.IsExploded = driver::read_memory<bool>(driver_handle, Bomb.PlantedC4 + cs2_dumper::schemas::client_dll::C_PlantedC4::m_bHasExploded);
+
+		Bomb.GameSceneNode = driver::read_memory<std::uintptr_t>(driver_handle, Bomb.PlantedC4 + cs2_dumper::schemas::client_dll::C_BaseEntity::m_pGameSceneNode);
+		Bomb.Origin = driver::read_memory<Vector3>(driver_handle, Bomb.GameSceneNode + cs2_dumper::schemas::client_dll::CGameSceneNode::m_vecAbsOrigin);
 	}
 	return Bomb;
 }

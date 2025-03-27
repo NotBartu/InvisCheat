@@ -27,7 +27,7 @@ int __stdcall wWinMain(
 		}
 	}
 	
-	std::thread Thread(StartBhop, std::ref(gui::UseRageToken), std::ref(gui::UseBhopToken), std::ref(gui::driver_handle), std::ref(gui::client));
+	std::thread Thread(StartBhop, std::ref(gui::UseBhopToken), std::ref(gui::driver_handle), std::ref(gui::client));
 	Thread.detach();
 
 
