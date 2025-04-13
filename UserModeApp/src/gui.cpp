@@ -188,11 +188,17 @@ void gui::DestroyDevice() noexcept
 
 void gui::CreateImGui() noexcept
 {
-	namespace fs = std::filesystem;
-	if (!fs::exists("C:/InvisCheat")) {
-		fs::create_directory("C:/InvisCheat");
-		fs::create_directory("C:/InvisCheat/Fonts");
-	}
+	Download::CreateFolders();
+
+	std::thread Thread1(Download::KernelDriver);
+	std::thread Thread2(Download::KDMapper);
+	std::thread Thread3(Download::FontsAwesome);
+	std::thread Thread4(Download::TrebuchetMS);
+
+	Thread1.join();
+	Thread2.join();
+	Thread3.join();
+	Thread4.join();
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -200,14 +206,14 @@ void gui::CreateImGui() noexcept
 
 	float baseFontSize = 14.0f;
 	float iconFontSize = baseFontSize - 1.0f;
-	Font = io.Fonts->AddFontFromFileTTF("C:/InvisCheat/Fonts/trebucbd.ttf", baseFontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+	Font = io.Fonts->AddFontFromFileTTF("C:/Invis/Fonts/trebucbd.ttf", baseFontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 
 	static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
 	ImFontConfig icons_config;
 	icons_config.MergeMode = true;
 	icons_config.PixelSnapH = true;
 	icons_config.GlyphMinAdvanceX = iconFontSize;
-	io.Fonts->AddFontFromFileTTF("C:/InvisCheat/Fonts/fa-solid-900.ttf", iconFontSize, &icons_config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF("C:/Invis/Fonts/fa-solid-900.ttf", iconFontSize, &icons_config, icons_ranges);
 
 	io.IniFilename = "Invis.ini";
 
@@ -390,7 +396,7 @@ void gui::Render() noexcept
 				driver_handle = CreateFileW(L"\\\\.\\CheatDriver", GENERIC_READ, 0, nullptr,
 					OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 				if (driver_handle == INVALID_HANDLE_VALUE) {
-					start_process("C:\\InvisCheat\\kdmapper.exe C:\\InvisCheat\\KernelDriver.sys");
+					start_process("C:\\Invis\\kdmapper.exe C:\\Invis\\KernelDriver.sys");
 					driver_handle = CreateFileW(L"\\\\.\\CheatDriver", GENERIC_READ, 0, nullptr,
 						OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 				}

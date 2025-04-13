@@ -69,6 +69,9 @@
     <ClCompile Include="src\Util\TimeNDate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Util\Download.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ftxui\component\animation.hpp">
@@ -243,6 +246,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Util\TimeNDate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\Download.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 
 #include <filesystem>
 #include <Windows.h>
-#include <Wininet.h>
+#include <Urlmon.h>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -35,3 +35,4 @@
 #include "Util/Vector.h"
 #include "Util/Calculate.h"
 #include "Util/TimeNDate.h"
+#include "Util/Download.h"
