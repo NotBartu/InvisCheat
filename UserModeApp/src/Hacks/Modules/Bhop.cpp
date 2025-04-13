@@ -1,14 +1,4 @@
-#include "Bhop.h"
-
-#include <iostream>
-#include <thread>
-#include <chrono>
-
-#include "../CS2MEM/client_dll.hpp"
-#include "../CS2MEM/offsets.hpp"
-#include "../CS2MEM/buttons.hpp"
-
-#include "../driver.hpp"
+#include "pch.h"
 
 constexpr std::uint32_t standing = 65665;
 constexpr std::uint32_t crouching = 65667;

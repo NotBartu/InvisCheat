@@ -1,7 +1,7 @@
 #pragma once
 #include "imgui.h"
 
-void ComfyStyle()
+inline void ComfyStyle()
 {
 	// Comfy style by Giuseppe from ImThemes
 	ImGuiStyle& style = ImGui::GetStyle();

@@ -1,9 +1,4 @@
-#include "Entity.h"
-
-#include "../CS2MEM/client_dll.hpp"
-#include "../CS2MEM/offsets.hpp"
-
-#include "../driver.hpp"
+#include "pch.h"
 
 std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintptr_t client) {
 	const std::uintptr_t localEntityPawn = driver::read_memory<std::uintptr_t>

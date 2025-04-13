@@ -1,10 +1,4 @@
-#include "gui.h"
-
-#include <thread>
-#include "Hacks/driver.hpp"
-#include "Hacks/process.hpp"
-
-#include "Hacks/Modules/Bhop.h"
+#include "pch.h"
 
 int __stdcall wWinMain(
 	HINSTANCE instance,

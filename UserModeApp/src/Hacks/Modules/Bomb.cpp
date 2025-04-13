@@ -1,11 +1,4 @@
-#include "Bomb.h"
-
-#include <iostream>
-
-#include "../CS2MEM/client_dll.hpp"
-#include "../CS2MEM/offsets.hpp"
-
-#include "../driver.hpp"
+#include "pch.h"
 
 Bomb GetBomb(const HANDLE driver_handle, const std::uintptr_t client)
 {

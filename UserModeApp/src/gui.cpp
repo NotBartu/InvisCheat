@@ -1,29 +1,4 @@
-#include "gui.h"
-
-#include <string>
-#include <thread>
-
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_dx9.h"
-#include "ImGui/imgui_impl_win32.h"
-#include "ImGui/Themes.h"
-#include "ImGui/Icons.h"
-#include "ImGui/Colors.h"
-
-#include "Hacks/CS2MEM/client_dll.hpp"
-#include "Hacks/CS2MEM/offsets.hpp"
-#include "Hacks/CS2MEM/buttons.hpp"
-
-#include "Hacks/driver.hpp"
-#include "Hacks/process.hpp"
-
-#include "Hacks/Modules/Settings.h"
-#include "Hacks/Modules/Bhop.h"
-#include "Hacks/Modules/Entity.h"
-#include "Hacks/Modules/Bomb.h"
-
-#include "Util/Vector.h"
-#include "Util/Calculate.h"
+#include "pch.h"
 
 Hacks::Setting Settings;
 
@@ -52,6 +27,24 @@ void ChangeWindowTransparency() {
 	RedrawWindow(gui::window, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME);
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
+
+std::vector<std::pair<std::string, std::string>> BoneConnections = {
+	{"neck_0", "spine_1"},
+	{"spine_1", "spine_2"},
+	{"spine_2", "pelvis"},
+	{"spine_1", "arm_upper_L"},
+	{"arm_upper_L", "arm_lower_L"},
+	{"arm_lower_L", "hand_L"},
+	{"spine_1", "arm_upper_R"},
+	{"arm_upper_R", "arm_lower_R"},
+	{"arm_lower_R", "hand_R"},
+	{"pelvis", "leg_upper_L"},
+	{"leg_upper_L", "leg_lower_L"},
+	{"leg_lower_L", "ankle_L"},
+	{"pelvis", "leg_upper_R"},
+	{"leg_upper_R", "leg_lower_R"},
+	{"leg_lower_R", "ankle_R"}
+};
 
 static LRESULT WindowProcess(
 	HWND window,
@@ -278,6 +271,9 @@ void gui::EndRender() noexcept
 
 void gui::Render() noexcept
 {
+	if (GetAsyncKeyState(VK_DELETE))
+		ChangeWindowTransparency();
+
 	if (!StartWindow && !SettingsWindow && !HacksWindow)
 		StartWindow = true;
 	if (!HacksWindow) {
@@ -289,7 +285,7 @@ void gui::Render() noexcept
 
 	if (StartWindow) {
 		ImGui::SetNextWindowPos({ 1600, 290 });
-		ImGui::SetNextWindowSize({ 300, 100 });
+		ImGui::SetNextWindowSize({ 300, 123 });
 		ImGui::Begin(
 			"Invis Cheat | Starting",
 			&isRunning,
@@ -365,6 +361,16 @@ void gui::Render() noexcept
 			StartWindow = false;
 		}
 
+		ImGui::Separator();
+
+		ImGui::Text("This Window");
+		ImGui::SameLine(); ImGui::Text(" - "); ImGui::SameLine();
+		ImGui::TextColored(gui::windowTransparent ? Colors::Green : Colors::Red, gui::windowTransparent ? "Transparent" : "Not Transparent");
+		ImGui::Text("%s:%s:%s %s.%s.%s", 
+			GetHour(), GetMinutes(), GetSeconds(), 
+			GetDay(), GetMonth(), GetYear()
+		);
+
 		ImGui::End();
 	}
 
@@ -398,13 +404,20 @@ void gui::Render() noexcept
 		ImGui::Checkbox("Show Sight", &Settings.ShowSight);
 		ImGui::Checkbox("Use Bhop", &Settings.UseBHOP);
 
+		ImGui::Separator();
+
+		ImGui::Text("This Window");
+		ImGui::SameLine(); ImGui::Text(" - "); ImGui::SameLine();
+		ImGui::TextColored(gui::windowTransparent ? Colors::Green : Colors::Red, gui::windowTransparent ? "Transparent" : "Not Transparent");
+		ImGui::Text("%s:%s:%s %s.%s.%s",
+			GetHour(), GetMinutes(), GetSeconds(),
+			GetDay(), GetMonth(), GetYear()
+		);
+
 		ImGui::End();
 	}
 
 	if (HacksWindow) {
-		if (GetAsyncKeyState(VK_DELETE))
-			ChangeWindowTransparency();
-
 		ImGui::SetNextWindowPos({ 1600, 290 });
 		ImGui::SetNextWindowSize({ 300, 500 });
 		ImGui::Begin(
@@ -433,7 +446,6 @@ void gui::Render() noexcept
 		}
 		else {
 			{ // Show Entities
-
 				for (int i = 0; i < AllEntities.size(); i++) {
 					Entity Entity = AllEntities[i];
 
@@ -480,6 +492,10 @@ void gui::Render() noexcept
 		ImGui::Text("This Window"); 
 		ImGui::SameLine(); ImGui::Text(" - "); ImGui::SameLine();
 		ImGui::TextColored(gui::windowTransparent ? Colors::Green : Colors::Red, gui::windowTransparent ? "Transparent" : "Not Transparent");
+		ImGui::Text("%s:%s:%s %s.%s.%s",
+			GetHour(), GetMinutes(), GetSeconds(),
+			GetDay(), GetMonth(), GetYear()
+		);
 
 		ImGui::End();
 		
