@@ -47,6 +47,15 @@ namespace gui
 	inline bool SettingsWindow = false;
 	inline bool HacksWindow = false;
 
+	// MsgBox
+	namespace MsgBox {
+		inline bool Window = false;
+		inline std::string Title = "MsgBox";
+		inline std::string Text1 = "1.";
+		inline std::string Text2 = "2.";
+		inline std::string Text3 = "3.";
+	}
+
 	// handles and other things
 	inline DWORD pid = 0;
 	inline HANDLE driver_handle = INVALID_HANDLE_VALUE;

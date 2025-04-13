@@ -27,6 +27,14 @@ void ChangeWindowTransparency() {
 	RedrawWindow(gui::window, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME);
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
+void ShowMsgBox(std::string Title, std::string Line1, std::string Line2, std::string Line3) {
+	gui::MsgBox::Title = Title;
+	gui::MsgBox::Text1 = Line1;
+	gui::MsgBox::Text2 = Line2;
+	gui::MsgBox::Text3 = Line3;
+
+	gui::MsgBox::Window = true;
+}
 
 std::vector<std::pair<std::string, std::string>> BoneConnections = {
 	{"neck_0", "spine_1"},
@@ -180,6 +188,12 @@ void gui::DestroyDevice() noexcept
 
 void gui::CreateImGui() noexcept
 {
+	namespace fs = std::filesystem;
+	if (!fs::exists("C:/InvisCheat")) {
+		fs::create_directory("C:/InvisCheat");
+		fs::create_directory("C:/InvisCheat/Fonts");
+	}
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ::ImGui::GetIO();
@@ -283,9 +297,42 @@ void gui::Render() noexcept
 		UseBhopToken = Settings.UseBHOP;
 	}
 
+	if (MsgBox::Window) {
+		const std::string Title = "Invis Cheat | " + MsgBox::Title;
+
+		ImVec2 WindowSize = ImVec2(300, 123);
+		ImGui::SetNextWindowSize(WindowSize);
+		ImGui::SetNextWindowPos(ImVec2(
+			(WIDTH - WindowSize.x) / 2,
+			(HEIGHT - WindowSize.y) / 2
+		));
+		ImGui::Begin(
+			Title.c_str(),
+			&MsgBox::Window,
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoSavedSettings |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoMove
+		);
+
+		ImGui::Text("%s", MsgBox::Text1.c_str());
+		ImGui::Text("%s", MsgBox::Text2.c_str());
+		ImGui::Text("%s", MsgBox::Text3.c_str());
+
+		ImGui::SetCursorPosY(ImGui::GetWindowHeight() - ImGui::GetStyle().WindowPadding.y - 21);
+		if (ImGui::Button("Ok"))
+			MsgBox::Window = false;
+
+		ImGui::End();
+	}
+
 	if (StartWindow) {
-		ImGui::SetNextWindowPos({ 1600, 290 });
-		ImGui::SetNextWindowSize({ 300, 123 });
+		ImVec2 WindowSize = ImVec2(300, 123);
+		ImGui::SetNextWindowSize(WindowSize);
+		ImGui::SetNextWindowPos(ImVec2(
+			WIDTH - 320,
+			(HEIGHT - WindowSize.y) / 2
+		));
 		ImGui::Begin(
 			"Invis Cheat | Starting",
 			&isRunning,
@@ -360,6 +407,9 @@ void gui::Render() noexcept
 			SettingsWindow = true;
 			StartWindow = false;
 		}
+		ImGui::SameLine(); ImGui::Text(" | "); ImGui::SameLine();
+		if (ImGui::Button("Test MsgBox"))
+			ShowMsgBox("Test MsgBox", "Test 1", "Test 2", "Test 3");
 
 		ImGui::Separator();
 
@@ -375,8 +425,12 @@ void gui::Render() noexcept
 	}
 
 	if (SettingsWindow) {
-		ImGui::SetNextWindowPos({ 1600, 290 });
-		ImGui::SetNextWindowSize({ 300, 500 });
+		ImVec2 WindowSize = ImVec2(300, 500);
+		ImGui::SetNextWindowSize(WindowSize);
+		ImGui::SetNextWindowPos(ImVec2(
+			WIDTH - 320,
+			(HEIGHT - WindowSize.y) / 2
+		));
 		ImGui::Begin(
 			"Invis Cheat | Settings",
 			&SettingsWindow,
@@ -418,8 +472,12 @@ void gui::Render() noexcept
 	}
 
 	if (HacksWindow) {
-		ImGui::SetNextWindowPos({ 1600, 290 });
-		ImGui::SetNextWindowSize({ 300, 500 });
+		ImVec2 WindowSize = ImVec2(300, 500);
+		ImGui::SetNextWindowSize(WindowSize);
+		ImGui::SetNextWindowPos(ImVec2(
+			WIDTH - 320,
+			(HEIGHT - WindowSize.y) / 2
+		));
 		ImGui::Begin(
 			"Invis Cheat | Hacks",
 			&HacksWindow,
