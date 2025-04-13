@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <Windows.h>
+#include <Wininet.h>
 #include <iostream>
 #include <string>
 #include <thread>
