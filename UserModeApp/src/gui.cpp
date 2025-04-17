@@ -27,7 +27,7 @@ void ChangeWindowTransparency() {
 	RedrawWindow(gui::window, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME);
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
-void ShowMsgBox(std::string Title, std::string Line1, std::string Line2, std::string Line3) {
+void gui::MsgBox::Show(std::string Title, std::string Line1, std::string Line2, std::string Line3) noexcept {
 	gui::MsgBox::Title = Title;
 	gui::MsgBox::Text1 = Line1;
 	gui::MsgBox::Text2 = Line2;
@@ -223,11 +223,11 @@ void gui::CreateImGui() noexcept
 	ImGui_ImplDX9_Init(device);
 
 	// Player Esp
-	Settings.UseEsp = false;
+	Settings.UseEsp = true;
 	Settings.UseBoxEsp = false;
 	Settings.UseSkeletonEsp = true;
 	Settings.UseHeadEsp = true;
-	Settings.EspShowPlayerName = true;
+	Settings.EspShowPlayerName = false;
 	Settings.EspShowPlayerHealth = true;
 
 	// Bomb Esp
@@ -333,6 +333,8 @@ void gui::Render() noexcept
 	}
 
 	if (StartWindow) {
+
+
 		ImVec2 WindowSize = ImVec2(300, 123);
 		ImGui::SetNextWindowSize(WindowSize);
 		ImGui::SetNextWindowPos(ImVec2(
@@ -340,7 +342,7 @@ void gui::Render() noexcept
 			(HEIGHT - WindowSize.y) / 2
 		));
 		ImGui::Begin(
-			"Invis Cheat | Starting",
+			"Invis Cheat | Starting | ",
 			&isRunning,
 			ImGuiWindowFlags_NoResize |
 			ImGuiWindowFlags_NoSavedSettings |
@@ -415,7 +417,7 @@ void gui::Render() noexcept
 		}
 		ImGui::SameLine(); ImGui::Text(" | "); ImGui::SameLine();
 		if (ImGui::Button("Test MsgBox"))
-			ShowMsgBox("Test MsgBox", "Test 1", "Test 2", "Test 3");
+			MsgBox::Show("Test MsgBox", "Test 1", "Test 2", "Test 3");
 
 		ImGui::Separator();
 
@@ -431,7 +433,9 @@ void gui::Render() noexcept
 	}
 
 	if (SettingsWindow) {
-		ImVec2 WindowSize = ImVec2(300, 500);
+		ImVec2 WindowSize = ImVec2(300.0f, 210.0f);
+		if (Settings.UseEsp)
+			WindowSize.y += 125.0f;
 		ImGui::SetNextWindowSize(WindowSize);
 		ImGui::SetNextWindowPos(ImVec2(
 			WIDTH - 320,
@@ -463,6 +467,10 @@ void gui::Render() noexcept
 
 		ImGui::Checkbox("Show Sight", &Settings.ShowSight);
 		ImGui::Checkbox("Use Bhop", &Settings.UseBHOP);
+
+		ImGui::Separator();
+
+		ImGui::SliderInt("Refresh Time", &RefreshTime, 1, 100);
 
 		ImGui::Separator();
 

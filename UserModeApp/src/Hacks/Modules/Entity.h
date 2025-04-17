@@ -24,3 +24,4 @@ struct Entity {
 };
 
 std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintptr_t client);
+int GetEntityCount(const HANDLE driver_handle, const std::uintptr_t client);

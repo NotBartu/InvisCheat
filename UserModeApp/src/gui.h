@@ -11,6 +11,7 @@ namespace gui
 	// when this changes, exit threads
 	// and close menu :)
 	inline bool isRunning = true;
+	inline int RefreshTime = 50;
 
 	// winapi window vars
 	inline HWND window = nullptr;
@@ -49,7 +50,10 @@ namespace gui
 
 	// MsgBox
 	namespace MsgBox {
+		void Show(std::string Title, std::string Line1, std::string Line2, std::string Line3) noexcept;
+
 		inline bool Window = false;
+
 		inline std::string Title = "MsgBox";
 		inline std::string Text1 = "1.";
 		inline std::string Text2 = "2.";

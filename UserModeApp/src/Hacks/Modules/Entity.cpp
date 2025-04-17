@@ -58,3 +58,35 @@ std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintp
 	}
 	return Entities;
 }
+
+int GetEntityCount(const HANDLE driver_handle, const std::uintptr_t client) {
+	const std::uintptr_t localEntityPawn = driver::read_memory<std::uintptr_t>
+		(driver_handle, client + cs2_dumper::offsets::client_dll::dwLocalPlayerPawn);
+
+	if (localEntityPawn == 0)
+		return 1;
+
+	int EntityCount = 0;
+
+	for (int i = 0; i < 64; i++)
+	{
+		const uintptr_t EntityList = driver::read_memory<std::uintptr_t>(driver_handle, client + cs2_dumper::offsets::client_dll::dwEntityList);
+
+		Entity Entity;
+
+		Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
+		if (Entity.Entity == 0)
+			continue;
+
+		Entity.EntityController = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (i & 0x1FF));
+		if (Entity.EntityController == 0)
+			continue;
+
+		Entity.IsAlive = driver::read_memory<bool>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_bPawnIsAlive);
+		if (!Entity.IsAlive)
+			continue;
+
+		EntityCount++;
+	}
+	return EntityCount;
+}

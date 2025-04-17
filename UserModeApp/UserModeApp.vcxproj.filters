@@ -18,37 +18,37 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui.cpp">
+    <ClCompile Include="Include\ImGui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_demo.cpp">
+    <ClCompile Include="Include\ImGui\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_draw.cpp">
+    <ClCompile Include="Include\ImGui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_dx11.cpp">
+    <ClCompile Include="Include\ImGui\imgui_impl_dx11.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_win32.cpp">
+    <ClCompile Include="Include\ImGui\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_tables.cpp">
+    <ClCompile Include="Include\ImGui\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_widgets.cpp">
+    <ClCompile Include="Include\ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_dx9.cpp">
+    <ClCompile Include="Include\ImGui\imgui_impl_dx9.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_dx10.cpp">
+    <ClCompile Include="Include\ImGui\imgui_impl_dx10.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_dx12.cpp">
+    <ClCompile Include="Include\ImGui\imgui_impl_dx12.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Hacks\Modules\Bhop.cpp">
@@ -60,7 +60,7 @@
     <ClCompile Include="src\Hacks\Modules\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pch.cpp">
+    <ClCompile Include="Include\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Util\Calculate.cpp">
@@ -164,40 +164,40 @@
     <ClInclude Include="src\ftxui\util\ref.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imconfig.h">
+    <ClInclude Include="Include\ImGui\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui.h">
+    <ClInclude Include="Include\ImGui\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_dx11.h">
+    <ClInclude Include="Include\ImGui\imgui_impl_dx11.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_win32.h">
+    <ClInclude Include="Include\ImGui\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_internal.h">
+    <ClInclude Include="Include\ImGui\imgui_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imstb_rectpack.h">
+    <ClInclude Include="Include\ImGui\imstb_rectpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imstb_textedit.h">
+    <ClInclude Include="Include\ImGui\imstb_textedit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imstb_truetype.h">
+    <ClInclude Include="Include\ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_dx9.h">
+    <ClInclude Include="Include\ImGui\imgui_impl_dx9.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_dx10.h">
+    <ClInclude Include="Include\ImGui\imgui_impl_dx10.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\imgui_impl_dx12.h">
+    <ClInclude Include="Include\ImGui\imgui_impl_dx12.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Hacks\driver.hpp">
@@ -227,10 +227,10 @@
     <ClInclude Include="src\Hacks\CS2MEM\offsets.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\Colors.h">
+    <ClInclude Include="Include\ImGui\Colors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\Icons.h">
+    <ClInclude Include="Include\ImGui\Icons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Util\Calculate.h">
@@ -239,10 +239,10 @@
     <ClInclude Include="src\Util\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui\Themes.h">
+    <ClInclude Include="Include\ImGui\Themes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\pch.h">
+    <ClInclude Include="Include\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Util\TimeNDate.h">
