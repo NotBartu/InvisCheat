@@ -1,10 +1,10 @@
 #include "pch.h"
 
-int __stdcall wWinMain(
-	HINSTANCE instance,
-	HINSTANCE previousInstance,
-	PWSTR arguments,
-	int commandShow)
+int WINAPI wWinMain(
+	_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR lpCmdLine,
+	_In_ int nShowCmd)
 {
 	// create gui
 	gui::CreateHWindow("Invis");
@@ -21,9 +21,11 @@ int __stdcall wWinMain(
 		}
 	}
 	
-	std::thread Thread(StartBhop, std::ref(gui::UseBhopToken), std::ref(gui::driver_handle), std::ref(gui::client));
-	Thread.detach();
-
+	// Threads
+	std::thread BhopThread(StartBhop, std::ref(gui::UseBhopToken), std::ref(gui::driver_handle), std::ref(gui::client));
+	BhopThread.detach();
+	std::thread TriggerThread(StartTrigger, std::ref(gui::UseTriggerToken), std::ref(Settings.TriggerKey), std::ref(gui::driver_handle), std::ref(gui::client));
+	TriggerThread.detach();
 
 	while (gui::isRunning)
 	{
@@ -31,7 +33,7 @@ int __stdcall wWinMain(
 		gui::Render();
 		gui::EndRender();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(gui::RefreshTime));
+		std::this_thread::sleep_for(std::chrono::milliseconds(Settings.RefreshTime));
 	}
 
 	// destroy gui

@@ -1,6 +1,6 @@
 #pragma once
-#include <d3d9.h>
-#include <iostream>
+
+constexpr std::string_view InvisVersion = "0.2";
 
 namespace gui
 {
@@ -11,7 +11,6 @@ namespace gui
 	// when this changes, exit threads
 	// and close menu :)
 	inline bool isRunning = true;
-	inline int RefreshTime = 50;
 
 	// winapi window vars
 	inline HWND window = nullptr;
@@ -39,14 +38,23 @@ namespace gui
 	void CreateImGui() noexcept;
 	void DestroyImGui() noexcept;
 
+	// handle ImGui rendering
 	void BeginRender() noexcept;
 	void EndRender() noexcept;
 	void Render() noexcept;
+
+	// window functions
+	void ChangeWindowTransparency() noexcept;
 
 	// imgui windows
 	inline bool StartWindow = true;
 	inline bool SettingsWindow = false;
 	inline bool HacksWindow = false;
+
+	// imgui window titles
+	inline const std::string StartTitle = std::string("Invis Cheat ") + std::string(InvisVersion) + std::string(" | Start");
+	inline const std::string SettingsTitle = std::string("Invis Cheat ") + std::string(InvisVersion) + std::string(" | Settings");
+	inline const std::string HacksTitle = std::string("Invis Cheat ") + std::string(InvisVersion) + std::string(" | Hacks");
 
 	// MsgBox
 	namespace MsgBox {
@@ -68,4 +76,5 @@ namespace gui
 
 	// thread tokens
 	inline std::atomic_bool UseBhopToken = false;
+	inline std::atomic_bool UseTriggerToken = false;
 }

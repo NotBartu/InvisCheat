@@ -2,7 +2,7 @@
 
 // Screen
 
-Vector3 world_to_screen(Vector3* v, view_matrix_t view_matrix) {
+Vector3 world_to_screen(Vector3* v, ViewMatrix_t view_matrix) {
 	float _x = view_matrix[0][0] * v->x + view_matrix[0][1] * v->y + view_matrix[0][2] * v->z + view_matrix[0][3];
 	float _y = view_matrix[1][0] * v->x + view_matrix[1][1] * v->y + view_matrix[1][2] * v->z + view_matrix[1][3];
 
@@ -47,7 +47,7 @@ std::map<std::string, int> BoneMap = {
 	{"ankle_R", 27}
 };
 
-Vector3 ReadHead(const HANDLE driver_handle, const std::uintptr_t BoneArray, view_matrix_t view_matrix) {
+Vector3 ReadHead(const HANDLE driver_handle, const std::uintptr_t BoneArray, ViewMatrix_t view_matrix) {
 	const uintptr_t BoneAddress = BoneArray + 6 * 32;
 	Vector3 BonePosition = driver::read_memory<Vector3>(driver_handle, BoneAddress);
 	const Vector3 BonePosition2D = world_to_screen(&BonePosition, view_matrix);
@@ -55,7 +55,7 @@ Vector3 ReadHead(const HANDLE driver_handle, const std::uintptr_t BoneArray, vie
 	return BonePosition2D;
 }
 
-CBones ReadBones(const HANDLE driver_handle, const std::uintptr_t BoneArray, view_matrix_t view_matrix) {
+CBones ReadBones(const HANDLE driver_handle, const std::uintptr_t BoneArray, ViewMatrix_t view_matrix) {
 	int BoneIndex;
 	std::uintptr_t BoneAddress;
 	Vector3 BonePosition;

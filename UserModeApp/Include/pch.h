@@ -1,7 +1,11 @@
 #pragma once
 
+#pragma comment(lib, "wininet.lib")
+
+#include <d3d9.h>
 #include <filesystem>
 #include <Windows.h>
+#include <Wininet.h>
 #include <Urlmon.h>
 #include <iostream>
 #include <string>
@@ -16,7 +20,9 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_dx9.h"
 #include "ImGui/imgui_impl_win32.h"
+#include "ImGui/Custom.h"
 #include "ImGui/Themes.h"
+#include "ImGui/Fonts.h"
 #include "ImGui/Icons.h"
 #include "ImGui/Colors.h"
 
@@ -28,7 +34,9 @@
 #include "../src/Hacks/process.hpp"
 
 #include "../src/Hacks/Modules/Settings.h"
+#include "../src/Hacks/Modules/Buttons.h"
 #include "../src/Hacks/Modules/Bhop.h"
+#include "../src/Hacks/Modules/Trigger.h"
 #include "../src/Hacks/Modules/Entity.h"
 #include "../src/Hacks/Modules/Bomb.h"
 
@@ -36,5 +44,4 @@
 #include "../src/Util/Calculate.h"
 #include "../src/Util/TimeNDate.h"
 #include "../src/Util/Download.h"
-
-#define InvisVersion 0.5
+// #include "ini.h"

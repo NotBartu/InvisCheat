@@ -4,12 +4,23 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 
-inline VOID start_process(const char* command)
+inline VOID start_process(const char* command, const bool CreateNoWindow = false)
 {
 	STARTUPINFOA si = { sizeof(STARTUPINFOA) };
 	PROCESS_INFORMATION pi;
 
-	if (CreateProcessA(nullptr, (LPSTR)command, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
+	if (CreateProcessA(
+		nullptr, 
+		(LPSTR)command, 
+		nullptr, 
+		nullptr, 
+		FALSE, 
+		CreateNoWindow ? CREATE_NO_WINDOW : 0,
+		nullptr, 
+		nullptr, 
+		&si, 
+		&pi
+	)) {
 		WaitForSingleObject(pi.hProcess, INFINITE);
 
 		CloseHandle(pi.hProcess);

@@ -1,5 +1,68 @@
 #include "pch.h"
 
+Entity GetEntityFromPawn(const HANDLE driver_handle, const std::uintptr_t client, std::uintptr_t EntityPawn) {
+	for (int i = 0; i < 64; i++)
+	{
+		const uintptr_t EntityList = driver::read_memory<std::uintptr_t>(driver_handle, client + cs2_dumper::offsets::client_dll::dwEntityList);
+
+		Entity Entity;
+
+		Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
+		if (Entity.Entity == 0)
+			continue;
+		Entity.EntityController = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (i & 0x1FF));
+		if (Entity.EntityController == 0)
+			continue;
+		Entity.EntityControllerPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_hPlayerPawn);
+		if (Entity.EntityControllerPawn == 0)
+			continue;
+		Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + (0x8 * ((Entity.EntityControllerPawn & 0x7FFF) >> 9) + 16));
+		if (Entity.Entity == 0)
+			continue;
+		Entity.EntityPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (Entity.EntityControllerPawn & 0x1FF));
+		if (Entity.EntityPawn == 0 || Entity.EntityPawn != EntityPawn)
+			continue;
+
+		Entity.Team = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
+		std::uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+		driver::read_memory_array(driver_handle, entityNameAddress, Entity.Name, 16);
+
+		Entity.IsAlive = driver::read_memory<bool>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_bPawnIsAlive);
+		Entity.Health = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iHealth);
+		Entity.Armor = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_ArmorValue);
+
+		Entity.Crosshair = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawnBase::m_iIDEntIndex);
+		Entity.ClippingWeapon = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawnBase::m_pClippingWeapon);
+
+		Entity.fFlags = driver::read_memory<std::uint32_t>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_fFlags);
+		Entity.IsOnGround = Entity.fFlags & (1 << 0);
+
+		Entity.GameSceneNode = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_pGameSceneNode);
+		Entity.BoneArray = driver::read_memory<std::uintptr_t>(driver_handle, Entity.GameSceneNode + 0x1F0);
+		Entity.Origin = driver::read_memory<Vector3>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BasePlayerPawn::m_vOldOrigin);
+		Entity.Head = { Entity.Origin.x, Entity.Origin.y, Entity.Origin.z + 75.f };
+
+		return Entity;
+	}
+
+	Entity Entity;
+
+	Entity.Entity = 0;
+	Entity.EntityController = 0;
+	Entity.EntityControllerPawn = 0;
+	Entity.EntityPawn = 0;
+	Entity.Team = 0;
+
+	return Entity;
+}
+
+Entity GetLocalEntity(const HANDLE driver_handle, const std::uintptr_t client) {
+	const std::uintptr_t LocalEntityPawn = driver::read_memory<std::uintptr_t>
+		(driver_handle, client + cs2_dumper::offsets::client_dll::dwLocalPlayerPawn);
+
+	return GetEntityFromPawn(driver_handle, client, LocalEntityPawn);
+}
+
 std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintptr_t client) {
 	const std::uintptr_t localEntityPawn = driver::read_memory<std::uintptr_t>
 		(driver_handle, client + cs2_dumper::offsets::client_dll::dwLocalPlayerPawn);
@@ -12,43 +75,38 @@ std::vector <Entity> GetAllEntities(const HANDLE driver_handle, const std::uintp
 
 		Entity Entity;
 
-		Entity.	Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
+		Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + ((8 * (i & 0x7FFF) >> 9) + 16));
 		if (Entity.Entity == 0)
 			continue;
-
 		Entity.EntityController = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (i & 0x1FF));
 		if (Entity.EntityController == 0)
 			continue;
-
 		Entity.EntityControllerPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_hPlayerPawn);
 		if (Entity.EntityControllerPawn == 0)
 			continue;
-
 		Entity.Entity = driver::read_memory<std::uintptr_t>(driver_handle, EntityList + (0x8 * ((Entity.EntityControllerPawn & 0x7FFF) >> 9) + 16));
 		if (Entity.Entity == 0)
 			continue;
-
 		Entity.EntityPawn = driver::read_memory<std::uintptr_t>(driver_handle, Entity.Entity + (120) * (Entity.EntityControllerPawn & 0x1FF));
 		if (Entity.EntityPawn == 0 || Entity.EntityPawn == localEntityPawn)
 			continue;
 
+		std::uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+		driver::read_memory_array(driver_handle, entityNameAddress, Entity.Name, 16);
 		Entity.Team = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iTeamNum);
 
 		Entity.IsAlive = driver::read_memory<bool>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_bPawnIsAlive);
 		if (!Entity.IsAlive)
 			continue;
-
 		Entity.Health = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_iHealth);
 		Entity.Armor = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawn::m_ArmorValue);
 
-		std::uintptr_t entityNameAddress = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityController + cs2_dumper::schemas::client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+		Entity.Crosshair = driver::read_memory<int>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawnBase::m_iIDEntIndex);
+		Entity.ClippingWeapon = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_CSPlayerPawnBase::m_pClippingWeapon);
 
-		driver::read_memory_array(driver_handle, entityNameAddress, Entity.Name, 16);
+		Entity.fFlags = driver::read_memory<std::uint32_t>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_fFlags);
+		Entity.IsOnGround = Entity.fFlags & (1 << 0);
 
-		Entity.IsOnGround =
-			driver::read_memory<std::uint32_t>(driver_handle,
-				Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_fFlags)
-			& (1 << 0);
 		Entity.GameSceneNode = driver::read_memory<std::uintptr_t>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BaseEntity::m_pGameSceneNode);
 		Entity.BoneArray = driver::read_memory<std::uintptr_t>(driver_handle, Entity.GameSceneNode + 0x1F0);
 		Entity.Origin = driver::read_memory<Vector3>(driver_handle, Entity.EntityPawn + cs2_dumper::schemas::client_dll::C_BasePlayerPawn::m_vOldOrigin);
